@@ -10,5 +10,5 @@ class Film(models.Model):
     imdb_pkts = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
 
 
-def __str__(self):
-    return "{} ({})".format(self.tytul, str(self.rok))
+    def __str__(self):
+        return "{} ({})".format(self.tytul, str(self.rok))

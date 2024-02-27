@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
+from filmy.views import wszystkie, szczegoly
 
 urlpatterns = [
-    path('wszystkie/', views.wszystkie),
-    path('szczegoly/', views.szczegoly),
+    path('wszystkie/', wszystkie),
+    path('szczegoly/<int:film_id>/', szczegoly)
 ]
