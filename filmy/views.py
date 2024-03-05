@@ -6,6 +6,14 @@ from filmy.forms import FilmForm
 from django.shortcuts import get_object_or_404
 
 
+def usun(request, film_id):
+    film = get_object_or_404(Film, pk=film_id)
+    if request.method == "POST":
+        film.delete()
+        return redirect(wszystkie)
+    return render(request, 'filmy/usun.html', {'film': film})
+
+
 def edycja(request, film_id):
     film = get_object_or_404(Film, pk=film_id)
     form = FilmForm(request.POST or None, instance=film)
