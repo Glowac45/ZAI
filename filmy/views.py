@@ -1,3 +1,37 @@
+from .models import Film
+from .serializers import FilmModelSerializer, UserSerializer, UserSerializerShort
+from django.contrib.auth.models import User
+from rest_framework import generics
+
+
+class UserCreateList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializerShort
+
+
+class FilmList(generics.ListAPIView):
+    queryset = Film.objects.all()
+    serializer_class = FilmModelSerializer
+
+
+class FilmRetrieve(generics.RetrieveAPIView):
+    queryset = Film.objects.all()
+    serializer_class = FilmModelSerializer
+
+
+class FilmCreateList(generics.ListCreateAPIView):
+    queryset = Film.objects.all()
+    serializer_class = FilmModelSerializer
+
+
+
+
+'''
 from django.http import HttpResponse
 from django.template import loader
 from filmy.models import Film
@@ -43,3 +77,4 @@ def szczegoly(request, film_id):
     film = Film.objects.get(id=film_id)
     context = {'film': film}
     return HttpResponse(template.render(context, request))
+'''
