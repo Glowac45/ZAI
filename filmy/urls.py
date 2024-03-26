@@ -7,8 +7,8 @@ from django.urls import path, include
 from rest_framework.authtoken import views
 
 urlpatterns = [
-    path('filmy/', FilmCreateList.as_view(), name= 'FilmCreateList'),
-    path('filmy/<int:pk>/', FilmRetrieveUpdateDestroy.as_view(), name= 'FilmRetrieveUpdateDestroy'),
+    path('filmy/', FilmCreateList.as_view(), name='FilmCreateList'),
+    path('filmy/<int:pk>/', FilmRetrieveUpdateDestroy.as_view(), name='FilmRetrieveUpdateDestroy'),
     path('extrainfo/', ExtraInfoCreateList.as_view(), name='ExtraInfoCreateList'),
     path('extrainfo/<int:pk>/',ExtraInfoRetrieveUpdateDestroy.as_view(), name='ExtraInfoRetrieveUpdateDestroy'),
     path('ocena/', OcenaCreateList.as_view(), name='OcenaCreateList'),
