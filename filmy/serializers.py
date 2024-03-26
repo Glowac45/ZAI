@@ -20,7 +20,7 @@ class OcenaSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id','username', 'is_staff', 'is_superuser', 'is_active']
 
 
 class UserSerializerShort(serializers.ModelSerializer):
@@ -59,9 +59,13 @@ class FilmSerializer(serializers.Serializer):
 
 
 class FilmModelSerializer(serializers.ModelSerializer):
+    extrainfo = serializers.StringRelatedField()
+    ocena_set = OcenaSerializer(read_only=True, many=True)
+    aktor_set = serializers.StringRelatedField(read_only=True, many=True)
+
     class Meta:
         model = Film
-        fields = ['id', 'tytul', 'rok', 'opis', 'premiera', 'imdb_points']
+        fields = ['id', 'tytul', 'rok','imdb_points','premiera','opis','owner','extrainfo','ocena_set','aktor_set']
 
     def create(self, validated_data):
         return Film.objects.create(**validated_data)
@@ -80,7 +84,7 @@ class ExtraInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraInfo
         fields = '__all__'
-
+        #fields = ['czas_trwania', 'gatunek', 'rezyser', 'filmy']
     def create(self, validated_data):
         return ExtraInfo.objects.create(**validated_data)
 
