@@ -2,6 +2,9 @@ from .views import FilmCreateList, FilmRetrieveUpdateDestroy,  ExtraInfoCreateLi
     OcenaCreateList, OcenaRetrieveUpdateDestroy, AktorCreateList, AktorRetrieveUpdateDestroy, \
     UserCreateList, UserRetrieveUpdateDestroy
 from django.urls import path
+from django.contrib import admin
+from django.urls import path, include
+from rest_framework.authtoken import views
 
 urlpatterns = [
     path('filmy/', FilmCreateList.as_view(), name= 'FilmCreateList'),

@@ -1,7 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
-# Create your models here.
+
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 
 class Film(models.Model):
@@ -11,6 +19,7 @@ class Film(models.Model):
     premiera = models.DateField(null=True, blank=True)
     imdb_points = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     owner = models.ForeignKey(User, related_name='filmy', on_delete=models.CASCADE, null=True, blank=True)
+
     def __str__(self):
         return "{} ({})".format(self.tytul, str(self.rok))
 
@@ -28,6 +37,7 @@ class ExtraInfo(models.Model):
     punkty_widzow = models.PositiveSmallIntegerField(default=0)
     film = models.OneToOneField(Film, on_delete=models.CASCADE, null=True, blank=True)
     owner = models.ForeignKey(User, related_name='einfo', on_delete=models.CASCADE, null=True, blank=True)
+
     # <-- relacja 1-to-1 z modelem 'Film'
     # Po ustaleniu relacji z modelem Film możliwa jest np. następująca
     # zmiana reprezentacji tekstowej modelu ExtraInfo
@@ -46,6 +56,7 @@ class Ocena(models.Model):
     gwiazdki = models.PositiveSmallIntegerField(default=5)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, related_name='oceny', on_delete=models.CASCADE, null=True, blank=True)
+
     # <-- relacja many-to-1 z modelem 'Film'
     # Po ustaleniu relacji z modelem Film możliwa jest np. następująca
     # zmiana reprezentacji tekstowej modelu Ocena
@@ -60,6 +71,7 @@ class Aktor(models.Model):
     nazwisko = models.CharField(max_length=32)
     filmy = models.ManyToManyField(Film)
     owner = models.ForeignKey(User, related_name='aktorzy', on_delete=models.CASCADE, null=True, blank=True)
+
     # <-- relacja many-to-many z modelem 'Film'
     # Po ustaleniu relacji z modelem Film możliwa jest np.
     # następująca zmiana reprezentacji tekstowej modelu Aktor
