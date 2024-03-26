@@ -1,80 +1,78 @@
-from .models import Film
-from .serializers import FilmModelSerializer, UserSerializer, UserSerializerShort
 from django.contrib.auth.models import User
+from .models import Film, ExtraInfo, Ocena, Aktor
+from .serializers import FilmModelSerializer, ExtraInfoSerializer, OcenaSerializer, AktorSerializer, UserSerializerShort
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from .permissions import IsOwnerOrReadOnly
+
+class FilmCreateList(generics.ListCreateAPIView):
+    # queryset = Film.objects.all().order_by('-rok','tytul')
+    serializer_class = FilmModelSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        queryset = Film.objects.all().order_by('-rok','tytul')
+        tytul = self.request.query_params.get('tytul')
+        id = self.request.query_params.get('id')
+        if tytul is not None:
+            queryset = queryset.filter(tytul__startswith=tytul)
+        if id is not None:
+            queryset = queryset.filter(id__exact=id)
+        return queryset
+
+class FilmRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Film.objects.all()
+    serializer_class = FilmModelSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+
+class ExtraInfoCreateList(generics.ListCreateAPIView):
+    queryset = ExtraInfo.objects.all()
+    serializer_class = ExtraInfoSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class ExtraInfoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ExtraInfo.objects.all()
+    serializer_class = ExtraInfoSerializer
+
+
+class OcenaCreateList(generics.ListCreateAPIView):
+    queryset = Ocena.objects.all()
+    serializer_class = OcenaSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class OcenaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ocena.objects.all()
+    serializer_class = OcenaSerializer
+
+
+class AktorCreateList(generics.ListCreateAPIView):
+    queryset = Aktor.objects.all()
+    serializer_class = AktorSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class AktorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Aktor.objects.all()
+    serializer_class = AktorSerializer
 
 
 class UserCreateList(generics.ListCreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserSerializerShort
+    permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
-class UserList(generics.ListAPIView):
+class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializerShort
-
-
-class FilmList(generics.ListAPIView):
-    queryset = Film.objects.all()
-    serializer_class = FilmModelSerializer
-
-
-class FilmRetrieve(generics.RetrieveAPIView):
-    queryset = Film.objects.all()
-    serializer_class = FilmModelSerializer
-
-
-class FilmCreateList(generics.ListCreateAPIView):
-    queryset = Film.objects.all()
-    serializer_class = FilmModelSerializer
-
-
-
-
-'''
-from django.http import HttpResponse
-from django.template import loader
-from filmy.models import Film
-from django.shortcuts import render, redirect
-from filmy.forms import FilmForm
-from django.shortcuts import get_object_or_404
-
-
-def usun(request, film_id):
-    film = get_object_or_404(Film, pk=film_id)
-    if request.method == "POST":
-        film.delete()
-        return redirect(wszystkie)
-    return render(request, 'filmy/usun.html', {'film': film})
-
-
-def edycja(request, film_id):
-    film = get_object_or_404(Film, pk=film_id)
-    form = FilmForm(request.POST or None, instance=film)
-    if form.is_valid():
-        form.save()
-        return redirect(wszystkie)
-    return render(request, 'filmy/u.html', {'form': form})
-
-
-def nowy(request):
-    nowyform = FilmForm(request.POST or None)
-    if nowyform.is_valid():
-        nowyform.save()
-        return redirect(wszystkie)
-    return render(request, 'filmy/c.html', {'nowyform': nowyform})
-
-
-def wszystkie(request):
-    template = loader.get_template("filmy/wszystkie.html")
-    wszystkie_filmy = Film.objects.all()
-    context = {'wszystkie_filmy': wszystkie_filmy, }
-    return HttpResponse(template.render(context, request))
-
-
-def szczegoly(request, film_id):
-    template = loader.get_template("filmy/szczegoly.html")
-    film = Film.objects.get(id=film_id)
-    context = {'film': film}
-    return HttpResponse(template.render(context, request))
-'''

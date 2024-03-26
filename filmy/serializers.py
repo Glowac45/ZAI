@@ -1,6 +1,20 @@
 from rest_framework import serializers
-from .models import Film, ExtraInfo
+from .models import Film, ExtraInfo, Ocena, Aktor
 from django.contrib.auth.models import User
+
+
+class AktorSerializer(serializers.ModelSerializer):
+    filmy = serializers.SlugRelatedField(slug_field='tytul', queryset=Film.objects.all(), many=True)
+
+    class Meta:
+        model = Aktor
+        fields = ['id', 'imie', 'nazwisko', 'filmy']
+
+
+class OcenaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ocena
+        fields = ['recenzja', 'gwiazdki', 'film']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,7 +26,15 @@ class UserSerializer(serializers.ModelSerializer):
 class UserSerializerShort(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["username", "is_superuser", "email", "is_staff", "is_active"]
+        fields = ['id', 'username', 'password', 'is_active', 'is_staff', 'is_superuser']
+        extra_kwargs = {'password': {'required': True, 'write_only': True}}
+
+    def create(self, validated_data):
+        password = validated_data.get('password', None)
+        user = self.Meta.model(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class FilmSerializer(serializers.Serializer):

@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -10,7 +10,7 @@ class Film(models.Model):
     opis = models.TextField(default="")
     premiera = models.DateField(null=True, blank=True)
     imdb_points = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
-
+    owner = models.ForeignKey(User, related_name='filmy', on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
         return "{} ({})".format(self.tytul, str(self.rok))
 
@@ -27,7 +27,7 @@ class ExtraInfo(models.Model):
     gatunek = models.PositiveSmallIntegerField(choices=GATUNEK, null=True, blank=True)
     punkty_widzow = models.PositiveSmallIntegerField(default=0)
     film = models.OneToOneField(Film, on_delete=models.CASCADE, null=True, blank=True)
-
+    owner = models.ForeignKey(User, related_name='einfo', on_delete=models.CASCADE, null=True, blank=True)
     # <-- relacja 1-to-1 z modelem 'Film'
     # Po ustaleniu relacji z modelem Film możliwa jest np. następująca
     # zmiana reprezentacji tekstowej modelu ExtraInfo
@@ -45,7 +45,7 @@ class Ocena(models.Model):
     recenzja = models.TextField(default="", blank=True)
     gwiazdki = models.PositiveSmallIntegerField(default=5)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
-
+    owner = models.ForeignKey(User, related_name='oceny', on_delete=models.CASCADE, null=True, blank=True)
     # <-- relacja many-to-1 z modelem 'Film'
     # Po ustaleniu relacji z modelem Film możliwa jest np. następująca
     # zmiana reprezentacji tekstowej modelu Ocena
@@ -59,7 +59,7 @@ class Aktor(models.Model):
     imie = models.CharField(max_length=32)
     nazwisko = models.CharField(max_length=32)
     filmy = models.ManyToManyField(Film)
-
+    owner = models.ForeignKey(User, related_name='aktorzy', on_delete=models.CASCADE, null=True, blank=True)
     # <-- relacja many-to-many z modelem 'Film'
     # Po ustaleniu relacji z modelem Film możliwa jest np.
     # następująca zmiana reprezentacji tekstowej modelu Aktor
