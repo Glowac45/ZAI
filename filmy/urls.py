@@ -1,6 +1,6 @@
 from .views import FilmCreateList, FilmRetrieveUpdateDestroy,  ExtraInfoCreateList, ExtraInfoRetrieveUpdateDestroy, \
     OcenaCreateList, OcenaRetrieveUpdateDestroy, AktorCreateList, AktorRetrieveUpdateDestroy, \
-    UserCreateList, UserRetrieveUpdateDestroy, api_root
+    ListaUzytkownikow, UserRetrieveUpdateDestroy, api_root
 from django.urls import path
 from django.contrib import admin
 from django.urls import path, include
@@ -16,6 +16,6 @@ urlpatterns = [
     path('ocena/<int:pk>/',OcenaRetrieveUpdateDestroy.as_view(), name='OcenaRetrieveUpdateDestroy'),
     path('aktor/', AktorCreateList.as_view(), name='AktorCreateList'),
     path('aktor/<int:pk>/', AktorRetrieveUpdateDestroy.as_view(), name='AktorRetrieveUpdateDestroy'),
-    path('user/', UserCreateList.as_view(), name='UserCreateList'),
+    path('user/', ListaUzytkownikow.as_view(), name='UserCreateList'),
     path('user/<int:pk>/', UserRetrieveUpdateDestroy.as_view(), name='UserRetrieveUpdateDestroy')
 ]
