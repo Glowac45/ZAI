@@ -16,6 +16,6 @@ urlpatterns = [
     path('ocena/<int:pk>/',OcenaRetrieveUpdateDestroy.as_view(), name='OcenaRetrieveUpdateDestroy'),
     path('aktor/', AktorCreateList.as_view(), name='AktorCreateList'),
     path('aktor/<int:pk>/', AktorRetrieveUpdateDestroy.as_view(), name='AktorRetrieveUpdateDestroy'),
-    path('user/', ListaUzytkownikow.as_view(), name='UserCreateList'),
+    path('user/', ListaUzytkownikow.as_view(), name='ListaUzytkownikow'),
     path('user/<int:pk>/', UserRetrieveUpdateDestroy.as_view(), name='UserRetrieveUpdateDestroy')
 ]

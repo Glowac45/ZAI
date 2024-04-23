@@ -13,15 +13,16 @@ from rest_framework.reverse import reverse
 def api_root(request, format=None):
     return Response({
         'Użytkownicy': reverse('ListaUzytkownikow', request=request, format=format),
-        'Wszystkie filmy': reverse('ListaFilmow', request=request, format=format),
-        'Informacje dodatkowe': reverse('InformacjeDodatkowe', request=request, format=format),
-        'Wszystkie oceny': reverse('Recenzje', request=request, format=format),
-        'Wszyscy aktorzy': reverse('Aktorzy', request=request, format=format),
+        'Wszystkie filmy': reverse('FilmCreateList', request=request, format=format),
+        'Informacje dodatkowe': reverse('ExtraInfoCreateList', request=request, format=format),
+        'Wszystkie oceny': reverse('OcenaCreateList', request=request, format=format),
+        'Wszyscy aktorzy': reverse('AktorCreateList', request=request, format=format),
     })
 
 
 class FilmCreateList(generics.ListCreateAPIView):
-    # queryset = Film.objects.all().order_by('-rok','tytul')
+    name = "Lista Filmów"
+    queryset = Film.objects.all().order_by('-rok','tytul')
     serializer_class = FilmModelSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -83,6 +84,7 @@ class AktorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Aktor.objects.all()
     serializer_class = AktorSerializer
 
+
 '''
 class UserCreateList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -92,6 +94,7 @@ class UserCreateList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 '''
+
 
 class ListaUzytkownikow(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
