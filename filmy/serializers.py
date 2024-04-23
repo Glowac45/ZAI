@@ -3,6 +3,14 @@ from .models import Film, ExtraInfo, Ocena, Aktor
 from django.contrib.auth.models import User
 
 
+class statRezyser(serializers.ListSerializer):
+    child = serializers.CharField()
+
+
+class statOceny(serializers.ListSerializer):
+    child = serializers.CharField()
+
+
 class AktorSerializer(serializers.ModelSerializer):
     filmy = serializers.SlugRelatedField(slug_field='tytul', queryset=Film.objects.all(), many=True)
 
@@ -20,7 +28,7 @@ class OcenaSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','username', 'is_staff', 'is_superuser', 'is_active']
+        fields = ['id', 'username', 'is_staff', 'is_superuser', 'is_active']
 
 
 class UserSerializerShort(serializers.ModelSerializer):
@@ -65,7 +73,8 @@ class FilmModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Film
-        fields = ['id', 'tytul', 'rok','imdb_points','premiera','opis','owner','extrainfo','ocena_set','aktor_set']
+        fields = ['id', 'tytul', 'rok', 'imdb_points', 'premiera', 'opis', 'owner', 'extrainfo', 'ocena_set',
+                  'aktor_set']
 
     def create(self, validated_data):
         return Film.objects.create(**validated_data)
@@ -84,7 +93,8 @@ class ExtraInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraInfo
         fields = '__all__'
-        #fields = ['czas_trwania', 'gatunek', 'rezyser', 'filmy']
+        # fields = ['czas_trwania', 'gatunek', 'rezyser', 'filmy']
+
     def create(self, validated_data):
         return ExtraInfo.objects.create(**validated_data)
 

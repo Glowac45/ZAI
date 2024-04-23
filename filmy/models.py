@@ -41,6 +41,7 @@ class ExtraInfo(models.Model):
     punkty_widzow = models.PositiveSmallIntegerField(default=0)
     film = models.OneToOneField(Film, on_delete=models.CASCADE, null=True, blank=True)
     owner = models.ForeignKey(User, related_name='einfo', on_delete=models.CASCADE, null=True, blank=True)
+    rezyser = models.CharField(max_length=100, null=True, blank=True)
 
     # <-- relacja 1-to-1 z modelem 'Film'
     # Po ustaleniu relacji z modelem Film możliwa jest np. następująca
