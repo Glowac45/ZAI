@@ -88,27 +88,21 @@ class FilmModelSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-'''
-class ExtraInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ExtraInfo
-        fields = ['czas_trwania', 'gatunek', 'rezyser', 'film']
 
-'''
 class ExtraInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraInfo
-        #fields = '__all__'
-        fields = ['czas_trwania', 'gatunek', 'rezyser', 'film', 'owner']
+        fields = '__all__'
+        # fields = ['czas_trwania', 'gatunek', 'rezyser', 'filmy']
 
     def create(self, validated_data):
         return ExtraInfo.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.czas_trwania = validated_data.get('czas_trwania', instance.czas_trwania)
-        instance.gatunek = validated_data.get('gatunek', instance.gatunek)
-        instance.rezyser = validated_data.get('rezyser', instance.rezyser)
-        instance.film = validated_data.get('film', instance.film)
-        instance.owner = validated_data.get('owner', instance.owner)
+        instance.tytul = validated_data.get('tytul', instance.tytul)
+        instance.rok = validated_data.get('rok', instance.rok)
+        instance.opis = validated_data.get('opis', instance.opis)
+        instance.premiera = validated_data.get('premiera', instance.premiera)
+        instance.imdb_points = validated_data.get('imdb_points', instance.imdb_points)
         instance.save()
         return instance
