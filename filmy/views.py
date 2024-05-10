@@ -28,7 +28,7 @@ def api_root(request, format=None):
 
 class FilmCreateList(generics.ListCreateAPIView):
     name = "Lista Filmów"
-    queryset = Film.objects.all().order_by('-rok','tytul')
+   # queryset = Film.objects.all().order_by('-rok','tytul')
     serializer_class = FilmModelSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -56,21 +56,21 @@ class ExtraInfoCreateList(generics.ListCreateAPIView):
     queryset = ExtraInfo.objects.all()
     serializer_class = ExtraInfoSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    #def perform_create(self, serializer):
+    #    serializer.save(owner=self.request.user)
 
 
 class ExtraInfoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = ExtraInfo.objects.all()
     serializer_class = ExtraInfoSerializer
-
+    #permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 class OcenaCreateList(generics.ListCreateAPIView):
     queryset = Ocena.objects.all()
     serializer_class = OcenaSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    #def perform_create(self, serializer):
+     #   serializer.save(owner=self.request.user)
 
 
 class OcenaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):

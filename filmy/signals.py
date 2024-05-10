@@ -10,11 +10,8 @@ from rest_framework.authtoken.models import Token
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance, created, **kwargs):
     if created:
-        try:
-            Token.objects.create(user=instance)
-        except IntegrityError:
-            # Token already exists for this user
-            pass
+        Token.objects.get_or_create(user=instance)
+
 
 @receiver(post_save, sender = Film)
 def nowaocena(sender, instance, created,  **kwargs):
