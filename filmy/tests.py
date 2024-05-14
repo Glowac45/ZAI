@@ -18,7 +18,6 @@ class TestyURL(APITestCase, URLPatternsTestCase):
 
     def setUp(self):
         User.objects.create_superuser(username='admin', password='admin')
-        self.test_user = User.objects.create_user(id=1, username='test_user', password='password')
 
     def test_FilmCreateList(self):
         url = reverse('FilmCreateList')
