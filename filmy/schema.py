@@ -1,9 +1,11 @@
 import graphene
 from django.db.models import Count
+from graphene import relay, InputObjectType
 from graphene_django import DjangoObjectType
 from django.contrib.auth.models import User
 from .models import Film, ExtraInfo, Ocena, Aktor
 import graphql_jwt
+from graphene_django.filter import DjangoFilterConnectionField
 
 
 
@@ -19,6 +21,15 @@ class Filters(graphene.InputObjectType):
 #
 # Typy
 #
+
+class FilmNode(DjangoObjectType):
+    class Meta:
+        model = Film
+        filter_fields = {
+            'tytul': ['exact','contains','startswith'],
+            'rok': ['exact']
+        }
+        interfaces = (relay.Node, )
 
 class FilmType(DjangoObjectType):
     class Meta:
@@ -52,6 +63,9 @@ class AktorType(DjangoObjectType):
     class Meta:
         model = Aktor
         fields = "__all__"
+
+class FilmFilter(InputObjectType):
+    tytul_contains = graphene.String(default_value="")
 
 
 #
